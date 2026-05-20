@@ -754,16 +754,31 @@ footer {
 <script>
 /* ── CONFIG ── */
 const SECRET_KEY = 'mcpatch2025'
-// ✏️ Ganti dengan publisher ID AdSense aslimu
-const ADSENSE_PUB_ID = 'ca-pub-XXXXXXXXXXXXXXXX'; 
+const BALLISTIC_KEY = 'd8911b4880bc14ea49c09e88027eb410'
+const BALLISTIC_INVOKE_URL = `https://ballisticcomainvitation.com/${BALLISTIC_KEY}/invoke.js`
 
-/* ── AD LOADER FUNCTION ── */
-function injectAdSenseScript() {
-  if (document.querySelector(`script[src*="adsbygoogle.js"]`)) return;
+/* ── AD LOADER (BALLISTIC ONLY) ── */
+function injectBallisticAd(slotId = 'ballistic-ad-slot') {
+  const slot = document.getElementById(slotId)
+  if (!slot) return
+  if (slot.dataset.loaded === '1') return
+  if (document.querySelector(`script[src="${BALLISTIC_INVOKE_URL}"]`)) {
+    slot.dataset.loaded = '1'
+    return
+  }
+
+  window.atOptions = {
+    key: BALLISTIC_KEY,
+    format: 'iframe',
+    height: 250,
+    width: 300,
+    params: {}
+  }
+
   const script = document.createElement('script');
   script.async = true;
-  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUB_ID}`;
-  script.crossOrigin = 'anonymous';
+  script.src = BALLISTIC_INVOKE_URL;
+  script.onload = () => { slot.dataset.loaded = '1' }
   document.head.appendChild(script);
 }
 
@@ -1023,11 +1038,8 @@ function renderLanding() {
   initReveal()
 }
 
-/* ── DOWNLOAD (ADS ENABLED) ── */
+/* ── DOWNLOAD (BALLISTIC ADS ENABLED) ── */
 function renderDownload(data) {
-  // Inject AdSense secara dinamis di sini karena params terbukti valid
-  injectAdSenseScript();
-
   const title   = esc(data.title       || 'Unknown File')
   const desc    = esc(data.description || 'This file has been verified and prepared for secure download.')
   const size    = data.size    || ''
@@ -1128,22 +1140,11 @@ function renderDownload(data) {
 
         <div style="margin: 12px 0;"></div>
 
-        <!-- Ad slot — Only visible during the wait view -->
+        <!-- Ad slot — loaded only when token params are valid -->
         <div class="ad-slot" style="min-height:100px;">
-          
-               <script>
-  atOptions = {
-    'key' : 'd8911b4880bc14ea49c09e88027eb410',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  };
-</script>
-<script src="https://ballisticcomainvitation.com/d8911b4880bc14ea49c09e88027eb410/invoke.js"></script>
-
-  
-               <!-- span class="ad-label">Advertisement</span -->
+          <div id="ballistic-ad-slot">
+            <span class="ad-label">Advertisement</span>
+          </div>
         </div>
 
         <div style="margin: 12px 0;"></div>
@@ -1179,6 +1180,7 @@ function renderDownload(data) {
     </div><!-- /dl-layout -->
   </div>`
 
+  injectBallisticAd('ballistic-ad-slot')
   initReveal()
 }
 
