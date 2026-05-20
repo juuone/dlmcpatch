@@ -299,7 +299,34 @@ img { display:block; }
   display:flex; align-items:center; justify-content:center;
   overflow:hidden;
 }
+.ad-slot > div {
+  width:100%;
+  min-height:inherit;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.ad-slot-banner { min-height:76px; }
+.ad-slot-banner > div { min-height:60px; }
+.ad-slot-banners { min-height:50px; }
+.ad-slot-banners > div { min-height:50px; }
+.ad-slot-rect { min-height:286px; }
+.ad-slot-native { min-height:180px; }
+.ad-slot-between { width:100%; }
+.ad-slot-betweens { width:320px; }
+@media (min-width:800px) {
+  .ad-slot-between { grid-column:1 / -1; }
+}
 .ad-label { font-family:var(--ffm); font-size:10px; color:var(--tx3); pointer-events:none; }
+.ad-native-card .card-body { padding:14px; }
+.ad-native-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
 
 /* ─── SCROLL REVEAL ──────────────────────────────────── */
 .reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease,transform .5s ease; }
@@ -660,6 +687,13 @@ footer {
         </div>
       </div>
 
+      <!-- Static ad slot -->
+      <div class="ad-slot ad-slot-rect reveal">
+        <div id="ballistic-static-rect-slot">
+          <span class="ad-label">Advertisement</span>
+        </div>
+      </div>
+
       <!-- Disclaimer -->
       <div class="card reveal">
         <div class="card-body">
@@ -754,32 +788,81 @@ footer {
 <script>
 /* ── CONFIG ── */
 const SECRET_KEY = 'mcpatch2025'
-const BALLISTIC_KEY = 'd8911b4880bc14ea49c09e88027eb410'
-const BALLISTIC_INVOKE_URL = `https://ballisticcomainvitation.com/${BALLISTIC_KEY}/invoke.js`
+const BALLISTIC_RECT_KEY = 'd8911b4880bc14ea49c09e88027eb410'
+const BALLISTIC_BANNER_KEY = 'a31a5e979bf1888ac1d5de43314cfea5'
+const BALLISTIC_NATIVE_KEY = '4e831a89073f59a15f6f633d615edc58'
+const SMARTLINK_URL = 'https://omg10.com/4/9553377'
 
 /* ── AD LOADER (BALLISTIC ONLY) ── */
-function injectBallisticAd(slotId = 'ballistic-ad-slot') {
+function ballisticInvokeUrl(key) {
+  return `https://ballisticcomainvitation.com/${key}/invoke.js`
+}
+let ballisticFrameQueue = Promise.resolve()
+function injectBallisticFrameAd(slotId, key, width, height) {
   const slot = document.getElementById(slotId)
   if (!slot) return
   if (slot.dataset.loaded === '1') return
-  if (slot.querySelector(`script[src="${BALLISTIC_INVOKE_URL}"]`)) {
+  const invokeUrl = ballisticInvokeUrl(key)
+  if (slot.querySelector(`script[src="${invokeUrl}"]`)) {
     slot.dataset.loaded = '1'
     return
   }
 
-  window.atOptions = {
-    key: BALLISTIC_KEY,
-    format: 'iframe',
-    height: 250,
-    width: 300,
-    params: {}
-  }
+  ballisticFrameQueue = ballisticFrameQueue.then(() => new Promise(resolve => {
+    window.atOptions = {
+      key,
+      format: 'iframe',
+      height,
+      width,
+      params: {}
+    }
 
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = BALLISTIC_INVOKE_URL;
+    const script = document.createElement('script')
+    script.src = invokeUrl
+    script.onload = () => {
+      slot.dataset.loaded = '1'
+      resolve()
+    }
+    script.onerror = () => resolve()
+    slot.appendChild(script)
+  }))
+}
+function injectBallisticNativeAd(slotId, key) {
+  const slot = document.getElementById(slotId)
+  if (!slot) return
+  if (slot.dataset.loaded === '1') return
+  const invokeUrl = ballisticInvokeUrl(key)
+  if (slot.querySelector(`script[src="${invokeUrl}"]`)) {
+    slot.dataset.loaded = '1'
+    return
+  }
+  const containerId = `container-${key}`
+  let nativeContainer = slot.querySelector(`#${containerId}`)
+  if (!nativeContainer) {
+    nativeContainer = document.createElement('div')
+    nativeContainer.id = containerId
+    slot.appendChild(nativeContainer)
+  }
+  const script = document.createElement('script')
+  script.async = true
+  script.setAttribute('data-cfasync', 'false')
+  script.src = invokeUrl
   script.onload = () => { slot.dataset.loaded = '1' }
-  slot.appendChild(script);
+  slot.appendChild(script)
+}
+function armSmartlinkReturn() {
+  try { sessionStorage.setItem('dl_smartlink_return', location.pathname + location.search) } catch {}
+}
+function consumeSmartlinkReturn() {
+  try {
+    const val = sessionStorage.getItem('dl_smartlink_return')
+    const cur = location.pathname + location.search
+    if (val !== cur) return false
+    sessionStorage.removeItem('dl_smartlink_return')
+    return true
+  } catch {
+    return false
+  }
 }
 
 /* ── COOKIE ── */
@@ -1011,7 +1094,7 @@ function renderLanding() {
           <div class="step">
             <span class="step-num">3</span>
             <div><div class="step-title">Wait for preparation</div>
-            <div class="step-desc">A 10-second timer finalises your download session and prevents bot abuse.</div></div>
+            <div class="step-desc">A 15-second timer finalises your download session and prevents bot abuse.</div></div>
           </div>
           <div class="step">
             <span class="step-num done">4</span>
@@ -1026,7 +1109,7 @@ function renderLanding() {
     <div class="fu fu3" id="faq">
       <h2 style="font-size:17px;font-weight:700;letter-spacing:-0.3px;margin-bottom:10px;padding-left:2px;">Frequently Asked Questions</h2>
       <div class="faq-list">
-        ${faqHtml('Why is there a countdown before downloading?','The 10-second preparation timer allows the server to set up a stable connection for your download and prevents automated bots from abusing the service — keeping it fast and free for everyone.')}
+        ${faqHtml('Why is there a countdown before downloading?','The 15-second preparation timer allows the server to set up a stable connection for your download and prevents automated bots from abusing the service — keeping it fast and free for everyone.')}
         ${faqHtml('Are all files safe to download?','Yes. Every file linked through DL.MCPATCH.ME comes from MCPATCH.ME, where files are scanned before being listed. We recommend keeping antivirus software active on your device.')}
         ${faqHtml('What is MaterialBinLoader (MBL2)?','MBL2 is a mod integrated into the patched Minecraft APK that lets you load and unload RenderDragon-compatible shader packs without re-patching the game each time.')}
         ${faqHtml('Do I need an account to download?','No registration or account is required. Visit a download link from MCPATCH.ME and follow the on-screen steps.')}
@@ -1107,6 +1190,15 @@ function renderDownload(data) {
         </div>
       </div>
         
+      <!-- 468x60 banner slot -->
+   <div style="display: flex; justify-content: center; width: 100%;">
+  <div class="ad-slot ad-slot-banners ad-slot-betweens fu fu1" style="margin: 0 auto; display: inline-block;">
+    <div id="ballistic-banner-slot">
+      </div>
+  </div>
+</div>
+
+
       <!-- RIGHT: Action panel -->
       <div class="action-panel fu fu1">
         <div class="action-box">
@@ -1126,7 +1218,7 @@ function renderDownload(data) {
                 <b>Are you sure you want to continue downloading?</b>
                 <p>Tap Continue to begin the download preparation.</p>
               </div>
-              <button class="btn btn-blue" onclick="startDownload()">
+              <button class="btn btn-blue" onclick="handleContinue()">
                 Continue
               </button>
             </div>
@@ -1140,10 +1232,18 @@ function renderDownload(data) {
 
         <div style="margin: 12px 0;"></div>
 
-        <!-- Ad slot — loaded only when token params are valid -->
-        <div class="ad-slot" style="min-height:100px;">
-          <div style="text-align: center" id="ballistic-ad-slot">
-            <span style="text-align: center" class="ad-label">Advertisement</span>
+        <!-- Native ad slot -->
+        <div class="card ad-native-card">
+          <div class="card-body">
+            <div class="ad-native-head">
+              <span style="font-size:12px;font-weight:700;color:var(--tx);">Recommended</span>
+              <span class="ad-label">Sponsored</span>
+            </div>
+            <div class="ad-slot ad-slot-native">
+              <div id="ballistic-native-slot">
+                
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1154,7 +1254,7 @@ function renderDownload(data) {
           <h2 style="font-size:15px;font-weight:700;letter-spacing:-0.2px;padding-left:2px;">Frequently Asked Questions</h2>
           <div class="faq-list">
             ${faqHtml('Is this file verified?','Yes. The file and redirect have been verified through the MCPATCH.ME system before publishing.')}
-            ${faqHtml('Why wait 10 seconds?','The countdown initialises a stable download session and prevents spam bots from abusing the service, keeping downloads free for everyone.')}
+            ${faqHtml('Why wait 15 seconds?','The countdown initialises a stable download session and prevents spam bots from abusing the service, keeping downloads free for everyone.')}
             ${faqHtml('Large file — what should I check?','Ensure you have a stable Wi-Fi connection and enough free storage space. Avoid downloading large files over mobile data.')}
             ${faqHtml('Does DL.MCPATCH.ME host the file?','No. Files are hosted on external mirrors or trusted providers. We act as a verified redirect portal only.')}
           </div>
@@ -1180,13 +1280,25 @@ function renderDownload(data) {
     </div><!-- /dl-layout -->
   </div>`
 
-  injectBallisticAd('ballistic-ad-slot')
+  injectBallisticFrameAd('ballistic-banner-slot', BALLISTIC_BANNER_KEY, 320, 50)
+  injectBallisticNativeAd('ballistic-native-slot', BALLISTIC_NATIVE_KEY)
+  injectBallisticFrameAd('ballistic-static-rect-slot', BALLISTIC_RECT_KEY, 300, 250)
+  if (consumeSmartlinkReturn()) startDownload(true)
   initReveal()
 }
 
-/* ── START DOWNLOAD ── */
-function startDownload() {
+function handleContinue() {
   if (dlPhase !== 'idle') return
+  dlPhase = 'smartlink'
+  armSmartlinkReturn()
+  toast('Preparing download...', 'blue')
+  setTimeout(() => { window.location.href = SMARTLINK_URL }, 250)
+}
+
+/* ── START DOWNLOAD ── */
+function startDownload(force = false) {
+  if (!force && dlPhase !== 'idle') return
+  if (force && dlPhase === 'progress') return
   dlPhase = 'progress'
 
   const inner = document.getElementById('action-inner')
@@ -1200,7 +1312,7 @@ function startDownload() {
             stroke="var(--blue)" stroke-width="5"
             stroke-dasharray="44 145" stroke-linecap="round"/>
         </svg>
-        <span class="ring-num" id="cd-num">10</span>
+        <span class="ring-num" id="cd-num">15</span>
       </div>
       <div class="countdown-title" id="cd-title">Preparing download...</div>
       <div class="countdown-sub" id="cd-sub">Verifying and initialising secure session</div>
@@ -1211,7 +1323,7 @@ function startDownload() {
 
   toast('Preparing your download...', 'blue')
 
-  let s = 10
+  let s = 15
   const numEl = document.getElementById('cd-num')
 
   const iv = setInterval(() => {
@@ -1271,11 +1383,25 @@ document.addEventListener('click', e => {
 /* ── INIT ── */
 ;(function () {
   const token = new URLSearchParams(location.search).get('d')
-  if (!token) { renderLanding(); initReveal(); return }
+  if (!token) {
+    renderLanding()
+    injectBallisticFrameAd('ballistic-static-rect-slot', BALLISTIC_RECT_KEY, 300, 250)
+    initReveal()
+    return
+  }
   const data = decodeToken(token)
-  if (!data || !data.title || !data.url) { renderLanding(); initReveal(); return }
+  if (!data || !data.title || !data.url) {
+    renderLanding()
+    injectBallisticFrameAd('ballistic-static-rect-slot', BALLISTIC_RECT_KEY, 300, 250)
+    initReveal()
+    return
+  }
   renderDownload(data)
 })()
+window.addEventListener('pageshow', () => {
+  if (dlPhase === 'progress' || dlPhase === 'ready' || dlPhase === 'done') return
+  if (consumeSmartlinkReturn()) startDownload(true)
+})
 </script>
 </body>
 </html>
