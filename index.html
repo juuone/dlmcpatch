@@ -762,7 +762,7 @@ function injectBallisticAd(slotId = 'ballistic-ad-slot') {
   const slot = document.getElementById(slotId)
   if (!slot) return
   if (slot.dataset.loaded === '1') return
-  if (document.querySelector(`script[src="${BALLISTIC_INVOKE_URL}"]`)) {
+  if (slot.querySelector(`script[src="${BALLISTIC_INVOKE_URL}"]`)) {
     slot.dataset.loaded = '1'
     return
   }
@@ -779,7 +779,7 @@ function injectBallisticAd(slotId = 'ballistic-ad-slot') {
   script.async = true;
   script.src = BALLISTIC_INVOKE_URL;
   script.onload = () => { slot.dataset.loaded = '1' }
-  document.head.appendChild(script);
+  slot.appendChild(script);
 }
 
 /* ── COOKIE ── */
