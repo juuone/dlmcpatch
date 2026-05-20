@@ -794,6 +794,7 @@ const SMARTLINK_URL = 'https://omg10.com/4/9553377'
 function ballisticInvokeUrl(key) {
   return `https://ballisticcomainvitation.com/${key}/invoke.js`
 }
+let ballisticFrameQueue = Promise.resolve()
 function injectBallisticFrameAd(slotId, key, width, height) {
   const slot = document.getElementById(slotId)
   if (!slot) return
@@ -804,19 +805,24 @@ function injectBallisticFrameAd(slotId, key, width, height) {
     return
   }
 
-  window.atOptions = {
-    key,
-    format: 'iframe',
-    height,
-    width,
-    params: {}
-  }
+  ballisticFrameQueue = ballisticFrameQueue.then(() => new Promise(resolve => {
+    window.atOptions = {
+      key,
+      format: 'iframe',
+      height,
+      width,
+      params: {}
+    }
 
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = invokeUrl;
-  script.onload = () => { slot.dataset.loaded = '1' }
-  slot.appendChild(script);
+    const script = document.createElement('script')
+    script.src = invokeUrl
+    script.onload = () => {
+      slot.dataset.loaded = '1'
+      resolve()
+    }
+    script.onerror = () => resolve()
+    slot.appendChild(script)
+  }))
 }
 function injectBallisticNativeAd(slotId, key) {
   const slot = document.getElementById(slotId)
