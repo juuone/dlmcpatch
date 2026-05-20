@@ -312,6 +312,10 @@ img { display:block; }
 .ad-slot-banner > div { min-height:60px; }
 .ad-slot-rect { min-height:286px; }
 .ad-slot-native { min-height:180px; }
+.ad-slot-between { width:100%; }
+@media (min-width:800px) {
+  .ad-slot-between { grid-column:1 / -1; }
+}
 .ad-label { font-family:var(--ffm); font-size:10px; color:var(--tx3); pointer-events:none; }
 
 /* ─── SCROLL REVEAL ──────────────────────────────────── */
@@ -1170,15 +1174,15 @@ function renderDownload(data) {
         </div>
       </div>
         
+      <!-- 468x60 banner slot -->
+      <div class="ad-slot ad-slot-banner ad-slot-between fu fu1">
+        <div id="ballistic-banner-slot">
+          <span class="ad-label">Advertisement</span>
+        </div>
+      </div>
+
       <!-- RIGHT: Action panel -->
       <div class="action-panel fu fu1">
-        <!-- 468x60 banner slot -->
-        <div class="ad-slot ad-slot-banner" style="margin-bottom:12px;">
-          <div id="ballistic-banner-slot">
-            <span class="ad-label">Advertisement</span>
-          </div>
-        </div>
-
         <div class="action-box">
           <!-- Warning banner -->
           <div class="warn-banner ${warn.cls}">
