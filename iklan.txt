@@ -1,0 +1,35 @@
+semua harus center style! 
+
+iklan 300x250:
+
+<script>
+  atOptions = {
+    'key' : 'd8911b4880bc14ea49c09e88027eb410',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://ballisticcomainvitation.com/d8911b4880bc14ea49c09e88027eb410/invoke.js"></script>
+
+iklan 468x60:
+
+<script>
+  atOptions = {
+    'key' : 'e7ffd6b794dfaf1b01116ca0feb08e3e',
+    'format' : 'iframe',
+    'height' : 60,
+    'width' : 468,
+    'params' : {}
+  };
+</script>
+<script src="https://ballisticcomainvitation.com/e7ffd6b794dfaf1b01116ca0feb08e3e/invoke.js"></script>
+
+
+iklan native & usahakan samain style atau temanya mirip sama websitenya, karena native gampang di atur: 
+<script async="async" data-cfasync="false" src="https://ballisticcomainvitation.com/4e831a89073f59a15f6f633d615edc58/invoke.js"></script>
+<div id="container-4e831a89073f59a15f6f633d615edc58"></div>
+
+smartlink: 
+https://omg10.com/4/9553377
