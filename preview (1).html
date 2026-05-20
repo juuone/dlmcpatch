@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Link Generator — DL.MCPATCH.ME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --border: rgba(0,0,0,0.08);
+  --tx: #1d1d1f;
+  --tx2: #6e6e73;
+  --blue: #0071e3;
+  --blue-hi: #0077ed;
+  --green: #28cd41;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --surface: #1c1c1e;
+    --border: rgba(255,255,255,0.08);
+    --tx: #f5f5f7;
+    --tx2: #98989d;
+    --blue: #2997ff;
+    --blue-hi: #409cff;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--tx);
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+.container {
+  width: 100%;
+  max-width: 600px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 28px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+}
+h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.5px; }
+.sub { font-size: 13px; color: var(--tx2); margin-bottom: 24px; }
+.form-group { margin-bottom: 16px; }
+label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--tx); }
+input, select, textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--tx);
+  outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--blue); }
+textarea { resize: vertical; min-height: 80px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+button {
+  width: 100%;
+  padding: 12px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.15s;
+}
+button:hover { background: var(--blue-hi); }
+.result-box {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+.result-box.show { display: block; }
+.output-wrapper {
+  position: relative;
+  margin-top: 8px;
+}
+.output-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 8px;
+  word-break: break-all;
+  white-space: pre-wrap;
+  padding-right: 70px;
+}
+.btn-copy {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  padding: 6px 12px;
+  margin: 0;
+  font-size: 11px;
+  background: var(--surface);
+  color: var(--tx);
+  border: 1px solid var(--border);
+}
+.btn-copy:hover { background: var(--bg); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>DL Token Generator</h1>
+  <p class="sub">Generate secure encrypted links for MCPATCH.ME portal</p>
+  
+  <div class="form-group">
+    <label for="baseUrl">Portal URL (Domain Kamu)</label>
+    <input type="text" id="baseUrl" value="https://dl.mcpatch.me/" placeholder="https://dl.mcpatch.me/">
+  </div>
+
+  <div class="form-group">
+    <label for="title">File Title *</label>
+    <input type="text" id="title" placeholder="e.g. Minecraft 1.26.10 Patched MBL2">
+  </div>
+
+  <div class="form-group">
+    <label for="url">Target Download URL (Direct Link/Host) *</label>
+    <input type="text" id="url" placeholder="https://your-storage.com/files/minecraft.apk">
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label for="size">File Size</label>
+      <input type="text" id="size" placeholder="e.g. 180 MB or 1.2 GB">
+    </div>
+    <div class="form-group">
+      <label for="version">Version</label>
+      <input type="text" id="version" placeholder="e.g. 1.26.10.05">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label for="type">File Type</label>
+      <select id="type">
+        <option value="APK">APK (App)</option>
+        <option value="ZIP">ZIP (Archive)</option>
+        <option value="MCPACK">MCPACK (Texture/Shader)</option>
+        <option value="FILE">FILE (Generic)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="image">Icon/Image URL (Optional)</label>
+      <input type="text" id="image" placeholder="https://mcpatch.me/pack-icon.png">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" placeholder="Verified patch featuring render dragon support..."></textarea>
+  </div>
+
+  <button onclick="generateLink()">Generate Encrypted Link</button>
+
+  <!-- Output Result -->
+  <div class="result-box" id="resultBox">
+    <label>Generated Portal URL:</label>
+    <div class="output-wrapper">
+      <div class="output-code" id="outputUrl"></div>
+      <button class="btn-copy" id="copyBtn" onclick="copyToClipboard()">Copy</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SECRET_KEY = 'mcpatch2025'; // Harus sama persis dengan yang di web download utama
+
+function xor(s, k) {
+  let o = '';
+  for (let i = 0; i < s.length; i++) {
+    o += String.fromCharCode(s.charCodeAt(i) ^ k.charCodeAt(i % k.length));
+  }
+  return o;
+}
+
+function encodeToken(obj) {
+  const jsonStr = JSON.stringify(obj);
+  const xorStr = xor(jsonStr, SECRET_KEY);
+  // Convert ke Safe Base64 (URL Safe)
+  return btoa(xorStr).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function generateLink() {
+  const baseUrl = document.getElementById('baseUrl').value.trim();
+  const title = document.getElementById('title').value.trim();
+  const url = document.getElementById('url').value.trim();
+  const size = document.getElementById('size').value.trim();
+  const version = document.getElementById('version').value.trim();
+  const type = document.getElementById('type').value;
+  const image = document.getElementById('image').value.trim();
+  const description = document.getElementById('description').value.trim();
+
+  if (!title || !url) {
+    alert('Please fill in at least File Title and Target Download URL!');
+    return;
+  }
+
+  // Buat objek data sesuai struktur parser download panel
+  const payload = {
+    title: title,
+    url: url
+  };
+
+  if (size) payload.size = size;
+  if (version) payload.version = version;
+  if (type) payload.type = type;
+  if (image) payload.image = image;
+  if (description) payload.description = description;
+
+  // Proses enkripsi
+  const token = encodeToken(payload);
+  
+  // Satukan dengan base URL portal
+  let finalBase = baseUrl;
+  if (!finalBase.endsWith('/')) finalBase += '/';
+  
+  const finalUrl = `${finalBase}?d=${token}`;
+
+  // Tampilkan hasil
+  document.getElementById('outputUrl').textContent = finalUrl;
+  document.getElementById('resultBox').classList.add('show');
+  
+  // Reset tombol copy
+  const copyBtn = document.getElementById('copyBtn');
+  copyBtn.textContent = 'Copy';
+  copyBtn.style.background = 'var(--surface)';
+}
+
+function copyToClipboard() {
+  const text = document.getElementById('outputUrl').textContent;
+  if (!text) return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.textContent = 'Copied!';
+    copyBtn.style.background = 'var(--green)';
+    copyBtn.style.color = '#fff';
+  }).catch(err => {
+    alert('Failed to copy link.');
+  });
+}
+</script>
+</body>
+</html>

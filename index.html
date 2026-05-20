@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title id="pg-title">DL.MCPATCH.ME — Secure Download Portal</title>
+<meta name="description" id="pg-desc" content="Secure download portal for MCPATCH.ME. Verified files, transparent downloads.">
+<meta name="robots" id="pg-robots" content="index, follow">
+<meta name="author" content="MCPATCH.ME">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --ff:       'DM Sans', -apple-system, sans-serif;
+  --ffm:      'DM Mono', monospace;
+
+  --bg:       #f5f5f7;
+  --surface:  #ffffff;
+  --surface2: #f5f5f7;
+  --border:   rgba(0,0,0,0.08);
+  --border2:  rgba(0,0,0,0.05);
+
+  --tx:       #1d1d1f;
+  --tx2:      #6e6e73;
+  --tx3:      #aeaeb2;
+
+  --blue:     #0071e3;
+  --blue-hi:  #0077ed;
+  --blue-dim: rgba(0,113,227,0.08);
+  --blue-bd:  rgba(0,113,227,0.18);
+
+  --green:    #28cd41;
+  --green-dim:rgba(40,205,65,0.08);
+  --green-bd: rgba(40,205,65,0.20);
+
+  --orange:   #ff9500;
+  --red:      #ff3b30;
+
+  --shadow-xs: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.08), 0 1px 6px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+  --r:        16px;
+  --r-sm:     12px;
+  --r-xs:     8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:       #000000;
+    --surface:  #1c1c1e;
+    --surface2: #2c2c2e;
+    --border:   rgba(255,255,255,0.08);
+    --border2:  rgba(255,255,255,0.05);
+
+    --tx:       #f5f5f7;
+    --tx2:      #98989d;
+    --tx3: \t#636366;
+
+    --blue:     #2997ff;
+    --blue-hi:  #409cff;
+    --blue-dim: rgba(41,151,255,0.12);
+    --blue-bd:  rgba(41,151,255,0.22);
+
+    --green:    #30d158;
+    --green-dim:rgba(48,209,88,0.10);
+    --green-bd: rgba(48,209,88,0.22);
+
+    --orange:   #ff9f0a;
+    --red:      #ff453a;
+
+    --shadow-xs: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-sm: 0 2px 12px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+  }
+}
+
+/* ─── RESET ──────────────────────────────────────────── */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body {
+  font-family: var(--ff);
+  background: var(--bg);
+  color: var(--tx);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.5;
+}
+::-webkit-scrollbar { width:0; height:0; }
+a { text-decoration:none; color:inherit; }
+button { font-family:var(--ff); cursor:pointer; border:none; background:none; }
+img { display:block; }
+
+/* ─── NAV ────────────────────────────────────────────── */
+.nav {
+  position: sticky; top:0; z-index:50;
+  border-bottom: 1px solid var(--border2);
+  background: rgba(var(--bg-rgb,245,245,247), 0.85);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+}
+@media (prefers-color-scheme:dark) { .nav { background:rgba(0,0,0,0.82); } }
+@media (prefers-color-scheme:light){ .nav { background:rgba(245,245,247,0.82); } }
+
+.nav-inner {
+  max-width: 1080px; margin:0 auto;
+  padding: 0 24px; height: 52px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-brand { display:flex; align-items:center; gap:10px; }
+.nav-logo {
+  width:30px; height:30px; border-radius:8px;
+  background: linear-gradient(145deg,#0071e3,#0051a2);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  box-shadow: 0 2px 8px rgba(0,113,227,0.30);
+}
+.nav-logo svg { width:15px; height:15px; stroke:#fff; }
+.nav-wordmark {
+  font-size:14px; font-weight:700; letter-spacing:-0.3px; color:var(--tx);
+}
+.nav-wordmark em { font-style:normal; color:var(--blue); }
+.nav-right { display:flex; align-items:center; gap:14px; }
+.nav-a {
+  font-size:13px; font-weight:500; color:var(--tx2);
+  transition:color .15s;
+}
+.nav-a:hover { color:var(--blue); }
+.nav-chip {
+  font-family:var(--ffm); font-size:10px; font-weight:500; letter-spacing:0.5px;
+  padding:3px 10px; border-radius:20px;
+  background:var(--blue-dim); border:1px solid var(--blue-bd);
+  color:var(--blue);
+}
+
+/* ─── LAYOUT ─────────────────────────────────────────── */
+.page { flex:1; }
+
+.shell {
+  max-width:1080px; margin:0 auto;
+  padding: 32px 24px 64px;
+}
+
+/* ─── CARD ───────────────────────────────────────────── */
+.card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  box-shadow:var(--shadow-sm);
+  overflow:hidden;
+}
+.card-body { padding:24px; }
+.card-body + .card-body { border-top:1px solid var(--border2); }
+
+/* ─── SECTION HEADER ─────────────────────────────────── */
+.sec-head {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:16px;
+}
+.sec-icon {
+  width:32px; height:32px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.sec-icon svg { width:15px; height:15px; }
+.si-blue   { background:var(--blue-dim);          color:var(--blue); }
+.si-green  { background:var(--green-dim);          color:var(--green); }
+.si-orange { background:rgba(255,149,0,.10);       color:var(--orange); }
+.si-red    { background:rgba(255,59,48,.08);       color:var(--red); }
+.si-gray   { background:var(--surface2);           color:var(--tx2); }
+.sec-title { font-size:15px; font-weight:700; letter-spacing:-0.2px; }
+
+/* ─── BUTTON ─────────────────────────────────────────── */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-family:var(--ff); font-size:15px; font-weight:600; letter-spacing:-0.2px;
+  border:none; border-radius:var(--r-sm); cursor:pointer;
+  padding:14px 24px; width:100%;
+  transition:opacity .15s, transform .1s;
+}
+.btn:active { transform:scale(.98); opacity:.88; }
+.btn:disabled { pointer-events:none; opacity:.50; }
+.btn svg { width:18px; height:18px; flex-shrink:0; }
+
+.btn-blue {
+  background: linear-gradient(160deg,#0077ed,#005bbf);
+  color:#fff;
+  box-shadow: 0 2px 12px rgba(0,113,227,.28);
+}
+.btn-green {
+  background: linear-gradient(160deg,#30d158,#1da83a);
+  color:#fff;
+  box-shadow: 0 2px 12px rgba(40,205,65,.25);
+}
+.btn-ghost {
+  background:var(--surface2); color:var(--tx2);
+  border:1px solid var(--border);
+}
+
+/* ─── BADGE ──────────────────────────────────────────── */
+.badge {
+  display:inline-flex; align-items:center;
+  font-family:var(--ffm); font-size:11px; font-weight:500; letter-spacing:0.3px;
+  padding:4px 10px; border-radius:6px;
+}
+.b-blue   { background:var(--blue-dim); border:1px solid var(--blue-bd); color:var(--blue); }
+.b-muted  { background:var(--surface2); border:1px solid var(--border); color:var(--tx2); }
+.b-orange { background:rgba(255,149,0,.08); border:1px solid rgba(255,149,0,.20); color:var(--orange); }
+.b-red    { background:rgba(255,59,48,.08); border:1px solid rgba(255,59,48,.18); color:var(--red); }
+.b-green  { background:var(--green-dim); border:1px solid var(--green-bd); color:var(--green); }
+
+/* ─── FAQ ────────────────────────────────────────────── */
+.faq-list { display:flex; flex-direction:column; gap:2px; }
+.faq-item { border-radius:var(--r-sm); overflow:hidden; background:var(--surface); border:1px solid var(--border); }
+.faq-q {
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  padding:15px 18px; gap:14px; text-align:left;
+  font-size:14px; font-weight:500; color:var(--tx);
+  transition:color .15s;
+}
+.faq-q:hover { color:var(--blue); }
+.faq-icon {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--surface2); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition:transform .25s, background .2s;
+}
+.faq-icon svg { width:10px; height:10px; stroke:var(--tx2); transition:stroke .2s; }
+.faq-q.open .faq-icon { transform:rotate(45deg); background:var(--blue); border-color:var(--blue); }
+.faq-q.open .faq-icon svg { stroke:#fff; }
+.faq-a { max-height:0; overflow:hidden; transition:max-height .38s cubic-bezier(.25,.46,.45,.94); }
+.faq-a.open { max-height:600px; }
+.faq-a-in { padding:0 18px 16px; font-size:13px; color:var(--tx2); line-height:1.72; }
+
+/* ─── LEGAL ──────────────────────────────────────────── */
+.legal { font-size:13px; color:var(--tx2); line-height:1.75; }
+.legal h3 { font-size:13px; font-weight:700; color:var(--tx); margin:14px 0 4px; }
+.legal h3:first-child { margin-top:0; }
+.legal p { margin-bottom:6px; }
+.legal ul { padding-left:16px; margin-bottom:6px; }
+.legal li { margin-bottom:3px; }
+.legal strong { color:var(--tx); font-weight:600; }
+
+/* ─── DIVIDER ────────────────────────────────────────── */
+.divider { height:1px; background:var(--border2); }
+
+/* ─── INFO ROWS ──────────────────────────────────────── */
+.info-row {
+  display:flex; align-items:flex-start; gap:14px;
+  padding:13px 0; border-bottom:1px solid var(--border2);
+}
+.info-row:last-child { border-bottom:none; padding-bottom:0; }
+.info-row:first-child { padding-top:0; }
+.ir-icon {
+  width:34px; height:34px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.ir-icon svg { width:15px; height:15px; }
+.iri-blue   { background:var(--blue-dim);          color:var(--blue); }
+.iri-green  { background:var(--green-dim);          color:var(--green); }
+.iri-orange { background:rgba(255,149,0,.10);       color:var(--orange); }
+.ir-label { font-size:11px; color:var(--tx2); font-weight:500; margin-bottom:2px; }
+.ir-val   { font-size:13px; font-weight:600; color:var(--tx); }
+
+/* ─── STEP ───────────────────────────────────────────── */
+.step-list { display:flex; flex-direction:column; gap:12px; }
+.step { display:flex; gap:12px; }
+.step-num {
+  width:22px; height:22px; border-radius:50%; flex-shrink:0; margin-top:1px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700;
+  background:var(--blue-dim); border:1px solid var(--blue-bd); color:var(--blue);
+}
+.step-num.done { background:var(--green-dim); border-color:var(--green-bd); color:var(--green); }
+.step-title { font-size:13px; font-weight:700; margin-bottom:2px; }
+.step-desc  { font-size:13px; color:var(--tx2); line-height:1.65; }
+
+/* ─── STAT ROW ───────────────────────────────────────── */
+.stat-row {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--border2);
+}
+.stat-cell {
+  padding:14px 12px; text-align:center;
+  border-right:1px solid var(--border2);
+}
+.stat-cell:last-child { border-right:none; }
+.stat-num   { font-size:18px; font-weight:800; letter-spacing:-0.5px; color:var(--blue); }
+.stat-label { font-size:11px; color:var(--tx2); margin-top:2px; }
+
+/* ─── AD SLOT ────────────────────────────────────────── */
+.ad-slot {
+  width:100%; min-height:90px;
+  background:var(--surface2); border:1px dashed var(--border);
+  border-radius:var(--r-sm);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.ad-label { font-family:var(--ffm); font-size:10px; color:var(--tx3); pointer-events:none; }
+
+/* ─── SCROLL REVEAL ──────────────────────────────────── */
+.reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease,transform .5s ease; }
+.reveal.in { opacity:1; transform:none; }
+
+/* ─── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.fu  { animation:fadeUp .4s cubic-bezier(.25,.46,.45,.94) both; }
+.fu1 { animation-delay:.06s; }
+.fu2 { animation-delay:.12s; }
+.fu3 { animation-delay:.18s; }
+.fu4 { animation-delay:.24s; }
+.fu5 { animation-delay:.30s; }
+
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.su { animation:slideUp .3s cubic-bezier(.25,.46,.45,.94) both; }
+
+@keyframes spin { to { transform:rotate(360deg); } }
+.spin { animation:spin .9s linear infinite; transform-origin:center; }
+
+/* ─── TOAST ──────────────────────────────────────────── */
+#toast {
+  position:fixed; top:62px; left:50%;
+  transform:translateX(-50%); z-index:200; pointer-events:none;
+}
+.toast-pill {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 18px; border-radius:99px;
+  font-size:13px; font-weight:600;
+  box-shadow:var(--shadow-lg); white-space:nowrap;
+}
+.toast-pill svg { width:14px; height:14px; }
+.tp-blue  { background:var(--blue);  color:#fff; }
+.tp-green { background:var(--green); color:#fff; }
+@keyframes tIn  { from{opacity:0;transform:translateY(-8px)scale(.96)} to{opacity:1;transform:none} }
+@keyframes tOut { from{opacity:1} to{opacity:0;transform:translateY(-6px)} }
+.te { animation:tIn  .22s ease both; }
+.tx { animation:tOut .22s ease both; }
+
+/* ─── COOKIE ─── */
+.cookie {
+  position:fixed; bottom:0; left:0; right:0; z-index:90;
+  background:var(--surface); border-top:1px solid var(--border2);
+  box-shadow:0 -4px 24px rgba(0,0,0,.08);
+  display:none;
+}
+@keyframes cookieIn { from{transform:translateY(100%)} to{transform:none} }
+.cookie.show { display:block; animation:cookieIn .35s ease; }
+.cookie-in {
+  max-width:1080px; margin:0 auto;
+  padding:14px 24px;
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+}
+.cookie-text { font-size:12px; color:var(--tx2); line-height:1.6; flex:1; min-width:200px; }
+.cookie-text a { color:var(--blue); }
+.cookie-btn {
+  flex-shrink:0; padding:8px 20px; border-radius:99px;
+  background:var(--blue); color:#fff;
+  font-size:13px; font-weight:600; cursor:pointer;
+  transition:opacity .15s;
+}
+.cookie-btn:hover { opacity:.85; }
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+footer {
+  border-top:1px solid var(--border2);
+  background:var(--surface);
+}
+.footer-in {
+  max-width:1080px; margin:0 auto;
+  padding:28px 24px;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+}
+.footer-brand { display:flex; align-items:center; gap:8px; }
+.footer-logo  {
+  width:22px; height:22px; border-radius:6px;
+  background:linear-gradient(145deg,#0071e3,#0051a2);
+  display:flex; align-items:center; justify-content:center;
+}
+.footer-logo svg { width:11px; height:11px; stroke:#fff; }
+.footer-name { font-size:13px; font-weight:700; color:var(--tx); }
+.footer-name em { font-style:normal; color:var(--blue); }
+.footer-links { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+.footer-links a { font-size:12px; color:var(--tx2); transition:color .15s; }
+.footer-links a:hover { color:var(--blue); }
+.footer-copy { font-size:11px; color:var(--tx3); }
+
+/* ─────────────────────────────────────────────────────
+   LANDING MODE
+───────────────────────────────────────────────────── */
+.landing-hero {
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:18px; padding:40px 32px 32px;
+}
+.landing-hero-logo {
+  width:80px; height:80px; border-radius:20px;
+  background:linear-gradient(145deg,#0077ed,#004fb3);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 32px rgba(0,113,227,.28);
+}
+.landing-hero-logo svg { width:38px; height:38px; stroke:#fff; }
+.landing-h1 {
+  font-size:clamp(26px,5vw,36px); font-weight:800;
+  letter-spacing:-0.8px; line-height:1.18; color:var(--tx);
+}
+.landing-h1 em { font-style:normal; color:var(--blue); }
+.landing-sub { font-size:15px; color:var(--tx2); line-height:1.6; max-width:380px; }
+.landing-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.landing-cta {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 28px; border-radius:99px;
+  background:linear-gradient(160deg,#0077ed,#005bbf);
+  color:#fff; font-size:14px; font-weight:700;
+  box-shadow:0 4px 20px rgba(0,113,227,.28);
+  transition:opacity .15s, transform .1s;
+}
+.landing-cta:hover { opacity:.9; }
+.landing-cta:active { transform:scale(.98); }
+.landing-cta svg { width:15px; height:15px; stroke:#fff; }
+
+/* feature grid */
+.feature-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:10px; padding:0 24px 24px;
+}
+.feature-cell {
+  background:var(--surface2); border:1px solid var(--border2);
+  border-radius:var(--r-sm); padding:16px;
+}
+.feature-cell svg { width:18px; height:18px; margin-bottom:8px; display:block; }
+.ft-title { font-size:13px; font-weight:700; color:var(--tx); margin-bottom:4px; }
+.ft-desc  { font-size:12px; color:var(--tx2); line-height:1.55; }
+
+/* landing grid desktop */
+.landing-grid {
+  display:grid; gap:12px;
+}
+@media (min-width:768px) {
+  .landing-grid { grid-template-columns:1fr 1fr; }
+}
+
+/* ─────────────────────────────────────────────────────
+   DOWNLOAD MODE
+───────────────────────────────────────────────────── */
+.dl-layout {
+  display:grid;
+  gap:16px;
+}
+@media (min-width:800px) {
+  .dl-layout { grid-template-columns:1fr 340px; align-items:start; }
+}
+
+/* App-store-style header */
+.app-header {
+  display:flex; align-items:flex-start; gap:18px;
+  padding:24px;
+}
+.app-icon-wrap {
+  flex-shrink:0;
+  width:80px; height:80px; border-radius:18px;
+  background:var(--surface2); border:1px solid var(--border);
+  overflow:hidden; display:flex; align-items:center; justify-content:center;
+  box-shadow:var(--shadow-xs);
+}
+.app-icon-wrap img { width:100%; height:100%; object-fit:cover; }
+.app-icon-svg { width:36px; height:36px; stroke:var(--blue); }
+
+.app-meta { flex:1; min-width:0; padding-top:2px; }
+.app-title {
+  font-size:20px; font-weight:800; letter-spacing:-0.4px;
+  color:var(--tx); line-height:1.25; margin-bottom:4px;
+}
+.app-dev {
+  font-size:12px; color:var(--blue); font-weight:600; margin-bottom:8px;
+}
+.app-badges { display:flex; flex-wrap:wrap; gap:6px; }
+
+/* stats bar */
+.app-stats {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--border2); border-bottom:1px solid var(--border2);
+  background:var(--surface2);
+}
+.app-stat {
+  padding:14px 8px; text-align:center;
+  border-right:1px solid var(--border2);
+}
+.app-stat:last-child { border-right:none; }
+.app-stat-val {
+  font-size:15px; font-weight:800; letter-spacing:-0.3px;
+  font-family:var(--ffm); color:var(--tx);
+}
+.app-stat-label { font-size:10px; color:var(--tx3); margin-top:2px; font-weight:500; }
+
+/* description */
+.app-desc { padding:20px 24px; font-size:13px; color:var(--tx2); line-height:1.75; }
+
+/* Action panel */
+.action-panel {
+  position:sticky; top:68px;
+}
+
+/* price / action box — App Store style */
+.action-box {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r); box-shadow:var(--shadow-md); overflow:hidden;
+}
+
+/* Warning banner */
+.warn-banner {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:14px 18px;
+  border-bottom:1px solid var(--border2);
+}
+.warn-banner svg { width:16px; height:16px; flex-shrink:0; margin-top:1px; }
+.warn-title { font-size:13px; font-weight:600; color:var(--tx); margin-bottom:2px; }
+.warn-note  { font-size:12px; color:var(--tx2); line-height:1.55; }
+
+.warn-green  { background:var(--green-dim); }
+.warn-orange { background:rgba(255,149,0,.07); }
+.warn-red    { background:rgba(255,59,48,.06); }
+.warn-blue   { background:var(--blue-dim); }
+
+.warn-green  svg { color:var(--green); }
+.warn-orange svg { color:var(--orange); }
+.warn-red    svg { color:var(--red); }
+.warn-blue   svg { color:var(--blue); }
+
+/* action body */
+.action-inner { padding:18px; }
+.action-inner .btn { border-radius:var(--r-sm); }
+
+/* countdown view */
+.countdown-view {
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center; gap:10px; padding:6px 0 4px;
+}
+.ring-wrap { position:relative; width:72px; height:72px; }
+.ring-wrap svg { position:absolute; inset:0; }
+.ring-arc { animation:spin .9s linear infinite; transform-origin:36px 36px; }
+.ring-num {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--ffm); font-size:20px; font-weight:700; color:var(--tx);
+}
+.countdown-title { font-size:15px; font-weight:700; color:var(--tx); }
+.countdown-sub   { font-size:12px; color:var(--tx2); line-height:1.5; }
+
+/* ready check */
+.ready-icon {
+  width:64px; height:64px; border-radius:50%;
+  background:var(--green-dim); border:2px solid var(--green-bd);
+  display:flex; align-items:center; justify-content:center; margin:0 auto;
+}
+.ready-icon svg { width:28px; height:28px; stroke:var(--green); }
+
+@media (min-width:800px) {
+  .shell { padding:40px 32px 80px; }
+}
+.hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- Cookie -->
+<div class="cookie" id="cookie">
+  <div class="cookie-in">
+    <p class="cookie-text">
+      We use cookies to improve experience, analyze traffic, and display relevant ads.
+      By continuing you agree to our <a href="#privacy">Privacy Policy</a>.
+    </p>
+    <button class="cookie-btn" onclick="acceptCookie()">Accept</button>
+  </div>
+</div>
+
+<!-- Nav -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">
+       <img height="16px" src="https://mcpatch.me/logo.webp" alt="logo mcpatch">
+      </div>
+      <span class="nav-wordmark">DL.<em>MCPATCH</em>.ME</span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-chip" id="nav-chip">PORTAL</span>
+    </div>
+  </div>
+</header>
+
+<!-- Page -->
+<div class="page">
+  <div class="shell">
+    <div id="app"></div>
+
+    <!-- ── Static sections ── -->
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;" id="static-sections">
+      <!-- Privacy -->
+      <div class="card reveal" id="privacy">
+        <div class="card-body">
+          <div class="sec-head">
+            <div class="sec-icon si-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <h2 class="sec-title">Privacy Policy</h2>
+          </div>
+          <div class="legal">
+            <p>Last updated: January 1, 2025. This Privacy Policy explains how DL.MCPATCH.ME collects, uses, and protects visitor information.</p>
+            <h3>Information We Collect</h3>
+            <ul>
+              <li><strong>Automatic Information:</strong> IP address, browser type, OS, pages visited, and access time via server logs.</li>
+              <li><strong>Cookies & Tracking:</strong> Used to improve experience, analyze traffic, and show relevant ads via Google AdSense.</li>
+              <li><strong>Download Data:</strong> Download counts and success status for analytics and server efficiency.</li>
+            </ul>
+            <h3>Use of Information</h3>
+            <ul>
+              <li>Provide, operate, and maintain the download service</li>
+              <li>Optimize bandwidth to keep the service free</li>
+              <li>Display ads through Google AdSense</li>
+              <li>Detect and prevent technical or security issues</li>
+            </ul>
+            <h3>Third-Party Sharing</h3>
+            <p>We do not sell personal data. Anonymized data may be shared with Google AdSense, Google Analytics, and hosting/CDN providers.</p>
+            <h3>User Rights</h3>
+            <p>You may access, correct, or delete your data. Contact us via admin@mcpatch.me.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="card reveal" id="terms">
+        <div class="card-body">
+          <div class="sec-head">
+            <div class="sec-icon si-orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 12 18 15 15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>
+            </div>
+            <h2 class="sec-title">Terms of Service</h2>
+          </div>
+          <div class="legal">
+            <p>Last updated: January 1, 2025. By using DL.MCPATCH.ME you agree to these Terms.</p>
+            <h3>Service Usage</h3>
+            <p>Users may download available files for personal and lawful use, and must comply with all applicable local laws.</p>
+            <h3>Limitation of Liability</h3>
+            <p>Files have undergone security verification but we cannot guarantee compatibility with all devices. Users are fully responsible for their use of downloaded files.</p>
+            <h3>Intellectual Property</h3>
+            <p>All site content belongs to DL.MCPATCH.ME. Downloadable files belong to their respective rights holders. Redistribution without permission is prohibited.</p>
+            <h3>Download Mechanism</h3>
+            <p>A confirmation step is implemented to optimize server bandwidth and ensure resources are allocated only for genuine requests.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="card reveal">
+        <div class="card-body">
+          <div class="sec-head">
+            <div class="sec-icon si-red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h2 class="sec-title">Disclaimer</h2>
+          </div>
+          <div class="legal">
+            <p>DL.MCPATCH.ME acts as a redirect portal generated from MCPATCH.ME. We do not create, own, or claim rights over downloadable files.</p>
+            <p>All trademarks and brands belong to their respective owners. Content is provided "as is" without any warranties. Third-party links are for convenience only.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DMCA -->
+      <div class="card reveal" id="dmca">
+        <div class="card-body">
+          <div class="sec-head">
+            <div class="sec-icon si-red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <h2 class="sec-title">DMCA & Copyright</h2>
+          </div>
+          <div class="legal">
+            <p>DL.MCPATCH.ME respects intellectual property rights and complies with the DMCA. If you believe a linked file infringes your copyright, contact us with identification of the work, the infringing URL, and your good-faith statement.</p>
+            <p>Send DMCA notices to: <strong>admin@mcpatch.me</strong>. Valid notices will be reviewed within 5 business days.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="card reveal" id="contact">
+        <div class="card-body">
+          <div class="sec-head">
+            <div class="sec-icon si-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <h2 class="sec-title">Contact</h2>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="info-row">
+              <div class="ir-icon iri-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              </div>
+              <div>
+                <div class="ir-label">Website</div>
+                <div class="ir-val">mcpatch.me</div>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="ir-icon iri-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <div class="ir-label">Email</div>
+                <div class="ir-val">admin@mcpatch.me</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /static-sections -->
+  </div>
+</div>
+
+<footer>
+  <div class="footer-in">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </div>
+      <span class="footer-name">DL.<em>MCPATCH</em>.ME</span>
+    </div>
+    <div class="footer-links">
+      <a href="#faq">FAQ</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#terms">Terms</a>
+      <a href="#dmca">DMCA</a>
+      <a href="#contact">Contact</a>
+      <a href="https://mcpatch.me">MCPATCH.ME</a>
+    </div>
+    <p class="footer-copy">© 2025 MCPATCH.ME — Secure Download Portal</p>
+  </div>
+</footer>
+
+<script>
+/* ── CONFIG ── */
+const SECRET_KEY = 'mcpatch2025'
+// ✏️ Ganti dengan publisher ID AdSense aslimu
+const ADSENSE_PUB_ID = 'ca-pub-XXXXXXXXXXXXXXXX'; 
+
+/* ── AD LOADER FUNCTION ── */
+function injectAdSenseScript() {
+  if (document.querySelector(`script[src*="adsbygoogle.js"]`)) return;
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUB_ID}`;
+  script.crossOrigin = 'anonymous';
+  document.head.appendChild(script);
+}
+
+/* ── COOKIE ── */
+function acceptCookie() {
+  try { localStorage.setItem('dl_cookie','1') } catch {}
+  document.getElementById('cookie').classList.remove('show')
+}
+;(function initCookie() {
+  let ok = false
+  try { ok = localStorage.getItem('dl_cookie') === '1' } catch {}
+  if (!ok) document.getElementById('cookie').classList.add('show')
+})()
+
+/* ── TOKEN ── */
+function xor(s, k) {
+  let o = ''
+  for (let i = 0; i < s.length; i++)
+    o += String.fromCharCode(s.charCodeAt(i) ^ k.charCodeAt(i % k.length))
+  return o
+}
+function decodeToken(t) {
+  try { return JSON.parse(xor(atob(t.replace(/-/g,'+').replace(/_/g,'/')), SECRET_KEY)) }
+  catch { return null }
+}
+
+/* ── ESCAPE ── */
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+/* ── SIZE PARSER → MB ── */
+function parseMB(raw) {
+  if (!raw) return null
+  const s = String(raw).trim().toLowerCase()
+  const n = parseFloat(s)
+  if (isNaN(n)) return null
+  if (s.includes('gb')) return n * 1024
+  if (s.includes('kb')) return n / 1024
+  return n
+}
+
+/* ── SIZE WARNING ── */
+function sizeWarn(raw) {
+  const mb = parseMB(raw)
+  if (mb === null) return {
+    cls:'warn-blue', icon:'info',
+    title:'Ready to download',
+    note:'File has been verified and is safe to proceed.'
+  }
+  if (mb < 10) return {
+    cls:'warn-green', icon:'check-circle',
+    title:'Very small file — ' + raw,
+    note:'Minimal data usage. Safe to download on any connection, including mobile data.'
+  }
+  if (mb < 80) return {
+    cls:'warn-green', icon:'check-circle',
+    title:'Lightweight file — ' + raw,
+    note:'Quick to download. Suitable for mobile data connections.'
+  }
+  if (mb < 300) return {
+    cls:'warn-blue', icon:'info',
+    title:'Moderate file size — ' + raw,
+    note:'A stable connection is recommended. Wi-Fi preferred for mobile users.'
+  }
+  if (mb < 1024) return {
+    cls:'warn-orange', icon:'alert-triangle',
+    title:'Large file — ' + raw,
+    note:'Please use Wi-Fi and ensure you have enough free storage before downloading.'
+  }
+  return {
+    cls:'warn-red', icon:'alert-circle',
+    title:'Very large file — ' + raw,
+    note:'Requires a strong Wi-Fi connection and significant storage space. Do not download on mobile data.'
+  }
+}
+
+/* ── ICON SVG ── */
+const ICONS = {
+  'info':           `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  'check-circle':   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  'alert-triangle': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  'alert-circle':   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  'download':       `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+  'arrow-right':    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+  'check':          `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+}
+
+/* ── TOAST ── */
+let _toastT = null
+function toast(msg, type='blue') {
+  const el = document.getElementById('toast')
+  el.innerHTML = `<div class="toast-pill tp-${type} te">${ICONS[type==='green'?'check':'info']}${msg}</div>`
+  if (_toastT) clearTimeout(_toastT)
+  _toastT = setTimeout(() => {
+    const p = el.querySelector('.toast-pill')
+    if (p) { p.classList.replace('te','tx'); setTimeout(() => el.innerHTML='', 250) }
+  }, 2600)
+}
+
+/* ── FAQ ── */
+function faqHtml(q, a) {
+  return `<div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      <span>${q}</span>
+      <span class="faq-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </span>
+    </button>
+    <div class="faq-a"><div class="faq-a-in">${a}</div></div>
+  </div>`
+}
+function toggleFaq(btn) {
+  const a = btn.nextElementSibling, open = a.classList.contains('open')
+  document.querySelectorAll('.faq-a').forEach(x => x.classList.remove('open'))
+  document.querySelectorAll('.faq-q').forEach(x => x.classList.remove('open'))
+  if (!open) { a.classList.add('open'); btn.classList.add('open') }
+}
+
+/* ── SCROLL REVEAL ── */
+function initReveal() {
+  const obs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }),
+    { threshold:0.06, rootMargin:'0px 0px -16px 0px' }
+  )
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
+}
+
+/* ── STATE ── */
+let dlPhase = 'idle', dlURL = ''
+
+/* ── LANDING (NO ADS LOADED) ── */
+function renderLanding() {
+  document.getElementById('nav-chip').textContent = 'PORTAL'
+
+  document.getElementById('app').innerHTML = `
+  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:12px;">
+    <!-- Hero card -->
+    <div class="card fu">
+      <div class="landing-hero">
+        <div class="landing-hero-logo">${ICONS.download}</div>
+        <h1 class="landing-h1">Official Download Portal<br>for <em>MCPATCH.ME</em></h1>
+        <p class="landing-sub">Secure, verified download links for Patched Minecraft with MBL2, shader support, 4D skins, and more.</p>
+        <div class="landing-chips">
+          <span class="badge b-muted">Patched Minecraft (MBL2)</span>
+          <span class="badge b-muted">Texture Pack</span>
+          <span class="badge b-muted">Shaders</span>
+          <span class="badge b-blue">Shader Support</span>
+        </div>
+        <a href="https://mcpatch.me" class="landing-cta">Browse Patches on MCPATCH.ME</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat-cell"><div class="stat-num">1.26+</div><div class="stat-label">Latest Version</div></div>
+        <div class="stat-cell"><div class="stat-num">MBL2</div><div class="stat-label">Shader Engine</div></div>
+        <div class="stat-cell"><div class="stat-num">Fast</div><div class="stat-label">Always</div></div>
+      </div>
+    </div>
+
+    <!-- Empty container placeholder for clean spacing without layout shift -->
+    <div style="margin-bottom: 4px;"></div>
+
+    <!-- About -->
+    <div class="card fu fu1" id="about">
+      <div class="card-body">
+        <div class="sec-head">
+          <div class="sec-icon si-blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h2 class="sec-title">About DL.MCPATCH.ME</h2>
+        </div>
+        <p style="font-size:13px;color:var(--tx2);line-height:1.75;margin-bottom:10px;">
+          DL.MCPATCH.ME is the dedicated secure download portal for <strong style="color:var(--tx);font-weight:600;">MCPATCH.ME</strong>.
+          Every download link on the main site points here, ensuring files are served through a consistent, verified channel.
+          When you follow a link, this portal decodes the destination, shows file details, and starts a short preparation
+          countdown before opening the actual download — preventing bot abuse and protecting bandwidth.
+        </p>
+        <p style="font-size:13px;color:var(--tx2);line-height:1.75;">
+          All files originate from the MCPATCH.ME catalogue with <strong style="color:var(--tx);font-weight:600;">MaterialBinLoader v2 (MBL2)</strong>
+          — letting you apply and remove RenderDragon shader packs without re-patching the game.
+        </p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-cell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div class="ft-title">Verified Files</div>
+          <div class="ft-desc">All links point to files scanned and listed on MCPATCH.ME before publishing.</div>
+        </div>
+        <div class="feature-cell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <div class="ft-title">MBL2 Ready</div>
+          <div class="ft-desc">Built-in MaterialBinLoader v2 for seamless RenderDragon shader support.</div>
+        </div>
+        <div class="feature-cell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <div class="ft-title">Token Protected</div>
+          <div class="ft-desc">URLs are obfuscated to prevent scraping and bot access.</div>
+        </div>
+        <div class="feature-cell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          <div class="ft-title">Always Free</div>
+          <div class="ft-desc">Supported by non-intrusive ads so downloads remain free.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="card fu fu2">
+      <div class="card-body">
+        <div class="sec-head">
+          <div class="sec-icon si-green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <h2 class="sec-title">How Downloads Work</h2>
+        </div>
+        <div class="step-list">
+          <div class="step">
+            <span class="step-num">1</span>
+            <div><div class="step-title">Find a patch on MCPATCH.ME</div>
+            <div class="step-desc">Browse the catalogue and tap a download button for the version you need.</div></div>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <div><div class="step-title">Land here with file details</div>
+            <div class="step-desc">The button encodes file info into a secure token and brings you here with title, size, and version.</div></div>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <div><div class="step-title">Wait for preparation</div>
+            <div class="step-desc">A 10-second timer finalises your download session and prevents bot abuse.</div></div>
+          </div>
+          <div class="step">
+            <span class="step-num done">4</span>
+            <div><div class="step-title">Download starts</div>
+            <div class="step-desc">Tap <strong>Download Now</strong> — the file opens directly from the host server.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="fu fu3" id="faq">
+      <h2 style="font-size:17px;font-weight:700;letter-spacing:-0.3px;margin-bottom:10px;padding-left:2px;">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        ${faqHtml('Why is there a countdown before downloading?','The 10-second preparation timer allows the server to set up a stable connection for your download and prevents automated bots from abusing the service — keeping it fast and free for everyone.')}
+        ${faqHtml('Are all files safe to download?','Yes. Every file linked through DL.MCPATCH.ME comes from MCPATCH.ME, where files are scanned before being listed. We recommend keeping antivirus software active on your device.')}
+        ${faqHtml('What is MaterialBinLoader (MBL2)?','MBL2 is a mod integrated into the patched Minecraft APK that lets you load and unload RenderDragon-compatible shader packs without re-patching the game each time.')}
+        ${faqHtml('Do I need an account to download?','No registration or account is required. Visit a download link from MCPATCH.ME and follow the on-screen steps.')}
+        ${faqHtml('How do I install the downloaded APK?','On Android, go to Settings → Security → enable "Install from unknown sources". Open the APK with your file manager and follow the installer. Disable the setting again afterward for safety.')}
+      </div>
+    </div>
+  </div>`
+
+  initReveal()
+}
+
+/* ── DOWNLOAD (ADS ENABLED) ── */
+function renderDownload(data) {
+  // Inject AdSense secara dinamis di sini karena params terbukti valid
+  injectAdSenseScript();
+
+  const title   = esc(data.title       || 'Unknown File')
+  const desc    = esc(data.description || 'This file has been verified and prepared for secure download.')
+  const size    = data.size    || ''
+  const version = data.version || ''
+  const type    = data.type    || 'FILE'
+  const image   = data.image  || ''
+  dlURL   = data.url || ''
+  dlPhase = 'idle'
+
+  const warn = sizeWarn(size)
+
+  document.getElementById('pg-title').textContent  = `Download ${data.title} — DL.MCPATCH.ME`
+  document.getElementById('pg-robots').content     = 'noindex, nofollow'
+  document.getElementById('nav-chip').textContent  = 'DOWNLOAD'
+
+  document.getElementById('app').innerHTML = `
+  <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+    <!-- Two-col layout -->
+    <div class="dl-layout">
+      <!-- LEFT: File info -->
+      <div class="file-panel" style="display:flex;flex-direction:column;gap:12px;">
+
+        <!-- App-store header card -->
+        <div class="card fu">
+          <div class="app-header">
+            <div class="app-icon-wrap">
+              ${image
+                ? `<img src="${esc(image)}" alt="${title}"
+                    onerror="this.parentElement.innerHTML='<svg class=\\'app-icon-svg\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke-width=\\'1.8\\' stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\'><path d=\\'M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4\\'/><polyline points=\\'7 10 12 15 17 10\\'/><line x1=\\'12\\' y1=\\'15\\' x2=\\'12\\' y2=\\'3\\'/></svg>'">`
+                : `<svg class="app-icon-svg" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                     <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                     <polyline points="7 10 12 15 17 10"/>
+                     <line x1="12" y1="15" x2="12" y2="3"/>
+                   </svg>`}
+            </div>
+            <div class="app-meta">
+              <h1 class="app-title">${title}</h1>
+              <div class="app-dev">MCPATCH.ME</div>
+              <div class="app-badges">
+                <span class="badge b-blue">${esc(type)}</span>
+                ${version ? `<span class="badge b-muted">v${esc(version)}</span>` : ''}
+                ${size    ? `<span class="badge b-muted">${esc(size)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats bar -->
+          <div class="app-stats">
+            <div class="app-stat">
+              <div class="app-stat-val">${esc(size || '—')}</div>
+              <div class="app-stat-label">Size</div>
+            </div>
+            <div class="app-stat">
+              <div class="app-stat-val">${esc(version || '—')}</div>
+              <div class="app-stat-label">Version</div>
+            </div>
+            <div class="app-stat">
+              <div class="app-stat-val">${esc(type)}</div>
+              <div class="app-stat-label">Type</div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="app-desc">${desc}</div>
+        </div>
+      </div>
+        
+      <!-- RIGHT: Action panel -->
+      <div class="action-panel fu fu1">
+        <div class="action-box">
+          <!-- Warning banner -->
+          <div class="warn-banner ${warn.cls}">
+            ${ICONS[warn.icon]}
+            <div>
+              <div class="warn-title">${esc(warn.title)}</div>
+              <div class="warn-note">${esc(warn.note)}</div>
+            </div>
+          </div>
+
+          <!-- Action inner — morphs between states -->
+          <div class="action-inner" id="action-inner">
+            <div style="margin-bottom:12px;">
+              <div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:14px;">
+                <b>Are you sure you want to continue downloading?</b>
+                <p>Tap Continue to begin the download preparation.</p>
+              </div>
+              <button class="btn btn-blue" onclick="startDownload()">
+                Continue
+              </button>
+            </div>
+            <div class="divider" style="margin:14px 0;"></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span style="font-size:12px;color:var(--tx2);">Verified by MCPATCH.ME</span>
+            </div>
+          </div>
+        </div><!-- /action-box -->
+
+        <div style="margin: 12px 0;"></div>
+
+        <!-- Ad slot — Only visible during the wait view -->
+        <div class="ad-slot" style="min-height:100px;">
+          <!-- ✏️ Isikan unit iklan AdSense insite Anda jika perlu, e.g. <ins class="adsbygoogle" ...> -->
+          <span class="ad-label">Advertisement</span>
+        </div>
+
+        <div style="margin: 12px 0;"></div>
+
+        <!-- FAQ -->
+        <div id="faq" style="display:flex;flex-direction:column;gap:10px;">
+          <h2 style="font-size:15px;font-weight:700;letter-spacing:-0.2px;padding-left:2px;">Frequently Asked Questions</h2>
+          <div class="faq-list">
+            ${faqHtml('Is this file verified?','Yes. The file and redirect have been verified through the MCPATCH.ME system before publishing.')}
+            ${faqHtml('Why wait 10 seconds?','The countdown initialises a stable download session and prevents spam bots from abusing the service, keeping downloads free for everyone.')}
+            ${faqHtml('Large file — what should I check?','Ensure you have a stable Wi-Fi connection and enough free storage space. Avoid downloading large files over mobile data.')}
+            ${faqHtml('Does DL.MCPATCH.ME host the file?','No. Files are hosted on external mirrors or trusted providers. We act as a verified redirect portal only.')}
+          </div>
+        </div>
+
+        <div style="margin: 12px 0;"></div>
+
+        <!-- Disclaimer -->
+        <div class="card" style="padding:0;">
+          <div class="card-body">
+            <div class="sec-head">
+              <div class="sec-icon si-red">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <h2 class="sec-title">Disclaimer</h2>
+            </div>
+            <p style="font-size:13px;color:var(--tx2);line-height:1.75;">
+              Users are responsible for ensuring compatibility with their own devices. External download providers may apply their own terms. Always scan downloaded files with trusted antivirus software. DL.MCPATCH.ME acts only as a redirect portal generated from MCPATCH.ME.
+            </p>
+          </div>
+        </div>
+      </div><!-- /action-panel -->
+    </div><!-- /dl-layout -->
+  </div>`
+
+  initReveal()
+}
+
+/* ── START DOWNLOAD ── */
+function startDownload() {
+  if (dlPhase !== 'idle') return
+  dlPhase = 'progress'
+
+  const inner = document.getElementById('action-inner')
+
+  inner.innerHTML = `
+    <div class="countdown-view" id="cd-view">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 72 72" width="72" height="72">
+          <circle cx="36" cy="36" r="30" fill="none" stroke="var(--border)" stroke-width="5"/>
+          <circle class="ring-arc" cx="36" cy="36" r="30" fill="none"
+            stroke="var(--blue)" stroke-width="5"
+            stroke-dasharray="44 145" stroke-linecap="round"/>
+        </svg>
+        <span class="ring-num" id="cd-num">10</span>
+      </div>
+      <div class="countdown-title" id="cd-title">Preparing download...</div>
+      <div class="countdown-sub" id="cd-sub">Verifying and initialising secure session</div>
+      <button class="btn btn-green hidden su" id="btn-dl" onclick="openDownload()" style="margin-top:4px;">
+        ${ICONS.download}Download Now
+      </button>
+    </div>`
+
+  toast('Preparing your download...', 'blue')
+
+  let s = 10
+  const numEl = document.getElementById('cd-num')
+
+  const iv = setInterval(() => {
+    s--; numEl.textContent = s
+    if (s <= 0) {
+      clearInterval(iv)
+      dlPhase = 'ready'
+
+      document.getElementById('cd-view').querySelector('.ring-wrap').outerHTML = ''
+      const cv = document.getElementById('cd-view')
+      cv.insertAdjacentHTML('afterbegin', `
+        <div class="ready-icon su">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>`)
+
+      document.getElementById('cd-title').textContent = 'Ready to download!'
+      document.getElementById('cd-sub').textContent   = 'Tap the button below to start.'
+
+      const btn = document.getElementById('btn-dl')
+      btn.classList.remove('hidden')
+    }
+  }, 1000)
+}
+
+/* ── OPEN DOWNLOAD ── */
+function openDownload() {
+  if (dlPhase !== 'ready') return
+  dlPhase = 'done'
+
+  const btn = document.getElementById('btn-dl')
+  btn.disabled = true
+  btn.innerHTML = `<svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="transform-origin:center"><path d="M21 12a9 9 0 11-6.22-8.56"/></svg>Opening...`
+
+  toast('Redirecting to download...', 'green')
+
+  setTimeout(() => {
+    window.open(dlURL, '_blank', 'noopener,noreferrer')
+    btn.disabled = false
+    btn.innerHTML = `${ICONS.check} Done`
+    btn.classList.remove('btn-green')
+    btn.style.cssText = 'background:var(--green-dim);color:var(--green);border:1px solid var(--green-bd);box-shadow:none;'
+  }, 900)
+}
+
+/* ── SMOOTH SCROLL ── */
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]')
+  if (a) {
+    e.preventDefault()
+    const t = document.querySelector(a.getAttribute('href'))
+    if (t) t.scrollIntoView({ behavior:'smooth', block:'start' })
+  }
+})
+
+/* ── INIT ── */
+;(function () {
+  const token = new URLSearchParams(location.search).get('d')
+  if (!token) { renderLanding(); initReveal(); return }
+  const data = decodeToken(token)
+  if (!data || !data.title || !data.url) { renderLanding(); initReveal(); return }
+  renderDownload(data)
+})()
+</script>
+</body>
+</html>
