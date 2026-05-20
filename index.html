@@ -317,6 +317,13 @@ img { display:block; }
   .ad-slot-between { grid-column:1 / -1; }
 }
 .ad-label { font-family:var(--ffm); font-size:10px; color:var(--tx3); pointer-events:none; }
+.ad-native-card .card-body { padding:14px; }
+.ad-native-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
 
 /* ─── SCROLL REVEAL ──────────────────────────────────── */
 .reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease,transform .5s ease; }
@@ -1198,7 +1205,7 @@ function renderDownload(data) {
             <div style="margin-bottom:12px;">
               <div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:14px;">
                 <b>Are you sure you want to continue downloading?</b>
-                <p>Tap Continue to open partner page first, then return to start preparation.</p>
+                <p>Tap Continue to begin the download preparation.</p>
               </div>
               <button class="btn btn-blue" onclick="handleContinue()">
                 Continue
@@ -1215,9 +1222,17 @@ function renderDownload(data) {
         <div style="margin: 12px 0;"></div>
 
         <!-- Native ad slot -->
-        <div class="ad-slot ad-slot-native">
-          <div id="ballistic-native-slot">
-            <span class="ad-label">Advertisement</span>
+        <div class="card ad-native-card">
+          <div class="card-body">
+            <div class="ad-native-head">
+              <span style="font-size:12px;font-weight:700;color:var(--tx);">Recommended</span>
+              <span class="ad-label">Sponsored</span>
+            </div>
+            <div class="ad-slot ad-slot-native">
+              <div id="ballistic-native-slot">
+                <span class="ad-label">Advertisement</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1265,7 +1280,7 @@ function handleContinue() {
   if (dlPhase !== 'idle') return
   dlPhase = 'smartlink'
   armSmartlinkReturn()
-  toast('Opening partner page...', 'blue')
+  toast('Preparing download...', 'blue')
   setTimeout(() => { window.location.href = SMARTLINK_URL }, 250)
 }
 
