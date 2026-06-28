@@ -594,62 +594,7 @@ footer {
 .countdown-sub   { font-size:12px; color:var(--tx2); line-height:1.5; }
 
   
-/* Container Utama (Warp) */
-.modern-video-wrap {
-  width: 100%;
-  max-width: 800px; /* Batas maksimal lebar player agar rapi */
-  margin: 0 auto;
-  max-height: 0; /* Mulai dari kosong */
-  opacity: 0;
-  overflow: hidden;
-  visibility: hidden;
-  transition: max-height 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease, margin 0.5s ease;
-}
 
-/* Ketika aktif, akan membesar & mendorong konten di bawahnya */
-.modern-video-wrap.is-active {
-  max-height: 500px; /* Beri ruang yang cukup untuk video rasio 16:9 */
-  opacity: 1;
-  visibility: visible;
-  margin: 20px auto; /* Memberi jarak dorong atas & bawah */
-}
-
-/* Membuat Video Responsif (Auto-Resize di HP / Desktop) */
-.video-inner-container {
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%; /* Rasio Kamera Modern 16:9 */
-}
-
-.video-inner-container .video-js {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-  border-radius: 12px; /* Sudut melengkung modern */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Efek bayangan halus */
-  overflow: hidden;
-}
-
-/* Kustomisasi Tampilan Tombol Play Video.js agar Minimalis */
-.vjs-theme-sea .vjs-big-play-button {
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(8px); /* Efek kaca (Glassmorphism) */
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 50% !important;
-  width: 70px !important;
-  height: 70px !important;
-  line-height: 68px !important;
-  margin-top: -35px !important;
-  margin-left: -35px !important;
-  transition: all 0.3s ease !important;
-}
-
-.vjs-theme-sea:hover .vjs-big-play-button {
-  background-color: #007bff !important; /* Warna aksen modern saat hover */
-  transform: scale(1.1);
-}
   
 
   
@@ -769,43 +714,6 @@ footer {
         </div>
       </div>
 
-
-<!-- 1. Bungkus / Wrap Utama (Modern Player Container) -->
-<div class='modern-video-wrap' id='videoWrap'>
-  <div class='video-inner-container'>
-    <video 
-      id='my-video' 
-      class='video-js vjs-big-play-centered vjs-theme-sea' 
-      controls='' 
-      preload='auto' 
-      width='640' 
-      height='360'>
-      <source src='URL_VIDEO_ANDA_DISINI.mp4' type='video/mp4'/>
-      <p class='vjs-no-js'>
-        Untuk melihat video ini, aktifkan JavaScript atau gunakan browser yang mendukung video HTML5.
-      </p>
-    </video>
-  </div>
-</div>
-
-<!-- 2. Script Logika & IMA Ads -->
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const player = videojs("my-video");
-    const videoWrap = document.getElementById("videoWrap");
-
-    // Inisialisasi IMA Ads
-    player.ima({
-      adTagUrl: "https://youradexchange.com/video/select.php?r=11527290"
-    });
-
-    // Efek Transisi: Muncul dari kosong (0px) ke penuh, mendorong konten di bawahnya
-    setTimeout(() => {
-      videoWrap.classList.add("is-active");
-    }, 800); // Video akan mulai muncul 0.8 detik setelah page dimuat
-  });
-</script>
-      
 
       
       <!-- Static ad slot -->
