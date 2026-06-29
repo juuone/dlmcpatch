@@ -714,7 +714,77 @@ footer {
         </div>
       </div>
 
+<link href="https://vjs.zencdn.net/8.23.4/video-js.css" rel="stylesheet">
 
+<style>
+#ad-player{
+    display:none;
+    max-width:720px;
+    margin:20px auto;
+    transition:.3s;
+}
+
+.video-js{
+    width:100%;
+    aspect-ratio:16/9;
+}
+</style>
+
+<div id="ad-player">
+    <video
+        id="my-video"
+        class="video-js vjs-default-skin"
+        controls
+        playsinline
+        preload="auto">
+    </video>
+</div>
+
+<script src="https://vjs.zencdn.net/8.23.4/video.min.js"></script>
+<script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-ads@7/dist/videojs.ads.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-ima@2/dist/videojs.ima.min.js"></script>
+
+<script>
+window.addEventListener("load", function () {
+
+    const player = videojs("my-video");
+
+    // Inisialisasi IMA SEBELUM src
+    player.ima({
+        adTagUrl: "https://youradexchange.com/video/select.php?r=11527290",
+        debug: true
+    });
+
+    player.src({
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        type: "video/mp4"
+    });
+
+    player.ready(function () {
+        player.ima.initializeAdDisplayContainer();
+    });
+
+    // Tampilkan player saat video siap
+    player.one("loadedmetadata", function () {
+        document.getElementById("ad-player").style.display = "block";
+    });
+
+    // Log
+    player.on("adsready", () => console.log("Ads Ready"));
+    player.on("adstart", () => console.log("Ad Started"));
+    player.on("adend", () => console.log("Ad Ended"));
+
+    player.on("adserror", (e) => {
+        console.error("Ads Error", e);
+    });
+
+    player.on("error", () => {
+        console.error(player.error());
+    });
+
+});
+</script>
       
       <!-- Static ad slot -->
       <div class="ad-slot ad-slot-rect reveal">
