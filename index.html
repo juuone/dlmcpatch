@@ -1147,11 +1147,11 @@ function renderDownload(data) {
       <div class="action-panel fu fu1">
         <div class="action-box">
           <!-- Warning banner -->
-          <div class="warn-banner \${warn.cls}">
-            \${ICONS[warn.icon]}
+          <div class="warn-banner ${warn.cls}">
+            ${ICONS[warn.icon]}
             <div>
-              <div class="warn-title">\${esc(warn.title)}</div>
-              <div class="warn-note">\${esc(warn.note)}</div>
+              <div class="warn-title">${esc(warn.title)}</div>
+              <div class="warn-note">${esc(warn.note)}</div>
             </div>
           </div>
 
@@ -1180,10 +1180,10 @@ function renderDownload(data) {
         <div id="faq" style="display:flex;flex-direction:column;gap:10px;">
           <h2 style="font-size:15px;font-weight:700;letter-spacing:-0.2px;padding-left:2px;">Frequently Asked Questions</h2>
           <div class="faq-list">
-            \${faqHtml('Is this file verified?','Yes. The file and redirect have been verified through the MCPATCH.ME system before publishing.')}
-            \${faqHtml('Why wait 15 seconds?','The countdown initialises a stable download session and prevents spam bots from abusing the service, keeping downloads free for everyone.')}
-            \${faqHtml('Large file — what should I check?','Ensure you have a stable Wi-Fi connection and enough free storage space. Avoid downloading large files over mobile data.')}
-            \${faqHtml('Does DL.MCPATCH.ME host the file?','No. Files are hosted on external mirrors or trusted providers. We act as a verified redirect portal only.')}
+            ${faqHtml('Is this file verified?','Yes. The file and redirect have been verified through the MCPATCH.ME system before publishing.')}
+            ${faqHtml('Why wait 15 seconds?','The countdown initialises a stable download session and prevents spam bots from abusing the service, keeping downloads free for everyone.')}
+            ${faqHtml('Large file — what should I check?','Ensure you have a stable Wi-Fi connection and enough free storage space. Avoid downloading large files over mobile data.')}
+            ${faqHtml('Does DL.MCPATCH.ME host the file?','No. Files are hosted on external mirrors or trusted providers. We act as a verified redirect portal only.')}
           </div>
         </div>
 
@@ -1241,7 +1241,7 @@ function startDownload(force = false) {
       <div class="countdown-title" id="cd-title">Preparing download...</div>
       <div class="countdown-sub" id="cd-sub">Verifying and initialising secure session</div>
       <button class="btn btn-green hidden su" id="btn-dl" onclick="openDownload()" style="margin-top:4px;">
-        \${ICONS.download}Download Now
+        ${ICONS.download}Download Now
       </button>
     </div>`
 
@@ -1288,7 +1288,7 @@ function openDownload() {
   setTimeout(() => {
     window.open(dlURL, '_blank', 'noopener,noreferrer')
     btn.disabled = false
-    btn.innerHTML = `\${ICONS.check} Done`
+    btn.innerHTML = `${ICONS.check} Done`
     btn.classList.remove('btn-green')
     btn.style.cssText = 'background:var(--green-dim);color:var(--green);border:1px solid var(--green-bd);box-shadow:none;'
   }, 900)
