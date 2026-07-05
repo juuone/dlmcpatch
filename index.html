@@ -167,6 +167,32 @@ img { display:block; }
 .card-body { padding:24px; }
 .card-body + .card-body { border-top:1px solid var(--border2); }
 
+/* ─── AD COAT / PLACEHOLDER ────────────────────────── */
+.ad-wrapper {
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+.ad-wrapper-native {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.ad-label {
+  font-size: 10px;
+  color: var(--tx3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
 /* ─── SECTION HEADER ─────────────────────────────────── */
 .sec-head {
   display:flex; align-items:center; gap:10px;
@@ -490,11 +516,6 @@ footer {
   border-top:1px solid var(--border2); border-bottom:1px solid var(--border2);
   background:var(--surface2);
 }
-.app-stats {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  border-top:1px solid var(--border2); border-bottom:1px solid var(--border2);
-  background:var(--surface2);
-}
 .app-stat {
   padding:14px 8px; text-align:center;
   border-right:1px solid var(--border2);
@@ -575,9 +596,17 @@ footer {
 </style>
 </head>
 <body>
+
+<!-- ─── ADSTERRA BG SCRIPTS ─── -->
+<!-- Social Bar -->
+<script src="https://ballisticcomainvitation.com/82/a7/9e/82a79e568929ce0d4ae32ad1c48643e8.js"></script>
+<!-- Popunder -->
 <script>(function(s){s.dataset.zone='11045546',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<!-- Push Notifications -->
 <script src="https://5gvci.com/act/files/tag.min.js?z=11218439" data-cfasync="false" async></script>
+<!-- Vignette Banner -->
 <script>(function(s){s.dataset.zone='11218457',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
 <div id="toast"></div>
 
 <!-- Cookie -->
@@ -1053,6 +1082,7 @@ function renderDownload(data) {
 
   document.getElementById('app').innerHTML = `
   <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px;">
+    
     <!-- Two-col layout -->
     <div class="dl-layout">
       <!-- LEFT: File info -->
@@ -1101,6 +1131,16 @@ function renderDownload(data) {
           <!-- Description -->
           <div class="app-desc">${desc}</div>
         </div>
+
+        <!-- 🔴 NATIVE ADS SLOT (2 Grid) -->
+        <div class="ad-wrapper ad-wrapper-native">
+          <div class="ad-label">Sponsored Links</div>
+          <div style="width:100%;">
+            <script async="async" data-cfasync="false" src="https://ballisticcomainvitation.com/4e831a89073f59a15f6f633d615edc58/invoke.js"><\/script>
+            <div id="container-4e831a89073f59a15f6f633d615edc58"></div>
+          </div>
+        </div>
+
       </div>
 
       <!-- RIGHT: Action panel -->
