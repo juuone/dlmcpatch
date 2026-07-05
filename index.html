@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
-  <script src="https://5gvci.com/act/files/tag.min.js?z=11218439" data-cfasync="false" async></script>
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F4DXE074LY"></script>
 <script>
@@ -70,7 +68,7 @@
 
     --tx:       #f5f5f7;
     --tx2:      #98989d;
-    --tx3: \t#636366;
+    --tx3: 	#636366;
 
     --blue:     #2997ff;
     --blue-hi:  #409cff;
@@ -304,43 +302,6 @@ img { display:block; }
 .stat-num   { font-size:18px; font-weight:800; letter-spacing:-0.5px; color:var(--blue); }
 .stat-label { font-size:11px; color:var(--tx2); margin-top:2px; }
 
-/* ─── AD SLOT ────────────────────────────────────────── */
-.ad-slot {
-  width:100%; min-height:90px;
-  background:var(--surface2); border:1px dashed var(--border);
-  border-radius:var(--r-sm);
-  display:flex; align-items:center; justify-content:center;
-  overflow:hidden;
-}
-.ad-slot > div {
-  width:100%;
-  min-height:inherit;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-.ad-slot-banner { min-height:76px; }
-.ad-slot-banner > div { min-height:60px; }
-.ad-slot-banners { min-height:50px; }
-.ad-slot-banners > div { min-height:50px; }
-.ad-slot-rect { min-height:286px; }
-.ad-slot-native { min-height:180px; }
-.ad-slot-between { width:100%; }
-.ad-slot-betweens { width:320px; }
-@media (min-width:800px) {
-  .ad-slot-between { grid-column:1 / -1; }
-}
-.ad-label { font-family:var(--ffm); font-size:10px; color:var(--tx3); pointer-events:none; }
-.ad-native-card .card-body { padding:14px; }
-.ad-native-head {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:10px;
-}
-
 /* ─── SCROLL REVEAL ──────────────────────────────────── */
 .reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease,transform .5s ease; }
 .reveal.in { opacity:1; transform:none; }
@@ -529,6 +490,11 @@ footer {
   border-top:1px solid var(--border2); border-bottom:1px solid var(--border2);
   background:var(--surface2);
 }
+.app-stats {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--border2); border-bottom:1px solid var(--border2);
+  background:var(--surface2);
+}
 .app-stat {
   padding:14px 8px; text-align:center;
   border-right:1px solid var(--border2);
@@ -594,11 +560,6 @@ footer {
 .countdown-title { font-size:15px; font-weight:700; color:var(--tx); }
 .countdown-sub   { font-size:12px; color:var(--tx2); line-height:1.5; }
 
-  
-
-  
-
-  
 /* ready check */
 .ready-icon {
   width:64px; height:64px; border-radius:50%;
@@ -614,13 +575,6 @@ footer {
 </style>
 </head>
 <body>
-
-  <script>(function(s){s.dataset.zone='11045546',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  <script src="https://ballisticcomainvitation.com/82/a7/9e/82a79e568929ce0d4ae32ad1c48643e8.js"></script>
-<script>(function(s){s.dataset.zone='11218457',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
-
-
 
 <div id="toast"></div>
 
@@ -709,14 +663,6 @@ footer {
             <h3>Download Mechanism</h3>
             <p>A confirmation step is implemented to optimize server bandwidth and ensure resources are allocated only for genuine requests.</p>
           </div>
-        </div>
-      </div>
-
-      
-      <!-- Static ad slot -->
-      <div class="ad-slot ad-slot-rect reveal">
-        <div id="ballistic-static-rect-slot">
-          <span class="ad-label">Advertisement</span>
         </div>
       </div>
 
@@ -814,68 +760,8 @@ footer {
 <script>
 /* ── CONFIG ── */
 const SECRET_KEY = 'mcpatch2025'
-const BALLISTIC_RECT_KEY = 'd8911b4880bc14ea49c09e88027eb410'
-const BALLISTIC_BANNER_KEY = 'a31a5e979bf1888ac1d5de43314cfea5'
-const BALLISTIC_NATIVE_KEY = '4e831a89073f59a15f6f633d615edc58'
 const SMARTLINK_URL = 'https://omg10.com/4/9553377'
 
-/* ── AD LOADER (BALLISTIC ONLY) ── */
-function ballisticInvokeUrl(key) {
-  return `https://ballisticcomainvitation.com/${key}/invoke.js`
-}
-let ballisticFrameQueue = Promise.resolve()
-function injectBallisticFrameAd(slotId, key, width, height) {
-  const slot = document.getElementById(slotId)
-  if (!slot) return
-  if (slot.dataset.loaded === '1') return
-  const invokeUrl = ballisticInvokeUrl(key)
-  if (slot.querySelector(`script[src="${invokeUrl}"]`)) {
-    slot.dataset.loaded = '1'
-    return
-  }
-
-  ballisticFrameQueue = ballisticFrameQueue.then(() => new Promise(resolve => {
-    window.atOptions = {
-      key,
-      format: 'iframe',
-      height,
-      width,
-      params: {}
-    }
-
-    const script = document.createElement('script')
-    script.src = invokeUrl
-    script.onload = () => {
-      slot.dataset.loaded = '1'
-      resolve()
-    }
-    script.onerror = () => resolve()
-    slot.appendChild(script)
-  }))
-}
-function injectBallisticNativeAd(slotId, key) {
-  const slot = document.getElementById(slotId)
-  if (!slot) return
-  if (slot.dataset.loaded === '1') return
-  const invokeUrl = ballisticInvokeUrl(key)
-  if (slot.querySelector(`script[src="${invokeUrl}"]`)) {
-    slot.dataset.loaded = '1'
-    return
-  }
-  const containerId = `container-${key}`
-  let nativeContainer = slot.querySelector(`#${containerId}`)
-  if (!nativeContainer) {
-    nativeContainer = document.createElement('div')
-    nativeContainer.id = containerId
-    slot.appendChild(nativeContainer)
-  }
-  const script = document.createElement('script')
-  script.async = true
-  script.setAttribute('data-cfasync', 'false')
-  script.src = invokeUrl
-  script.onload = () => { slot.dataset.loaded = '1' }
-  slot.appendChild(script)
-}
 function armSmartlinkReturn() {
   try { sessionStorage.setItem('dl_smartlink_return', location.pathname + location.search) } catch {}
 }
@@ -1023,7 +909,7 @@ function initReveal() {
 /* ── STATE ── */
 let dlPhase = 'idle', dlURL = ''
 
-/* ── LANDING (NO ADS LOADED) ── */
+/* ── LANDING ── */
 function renderLanding() {
   document.getElementById('nav-chip').textContent = 'PORTAL'
 
@@ -1050,7 +936,6 @@ function renderLanding() {
       </div>
     </div>
 
-    <!-- Empty container placeholder for clean spacing without layout shift -->
     <div style="margin-bottom: 4px;"></div>
 
     <!-- About -->
@@ -1092,7 +977,7 @@ function renderLanding() {
         <div class="feature-cell">
           <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
           <div class="ft-title">Always Free</div>
-          <div class="ft-desc">Supported by non-intrusive ads so downloads remain free.</div>
+          <div class="ft-desc">Supported by optimized systems so downloads remain free.</div>
         </div>
       </div>
     </div>
@@ -1147,7 +1032,7 @@ function renderLanding() {
   initReveal()
 }
 
-/* ── DOWNLOAD (BALLISTIC ADS ENABLED) ── */
+/* ── DOWNLOAD MODE ── */
 function renderDownload(data) {
   const title   = esc(data.title       || 'Unknown File')
   const desc    = esc(data.description || 'This file has been verified and prepared for secure download.')
@@ -1215,15 +1100,6 @@ function renderDownload(data) {
           <div class="app-desc">${desc}</div>
         </div>
       </div>
-        
-      <!-- 468x60 banner slot -->
-   <div style="display: flex; justify-content: center; width: 100%;">
-  <div class="ad-slot ad-slot-banners ad-slot-betweens fu fu1" style="margin: 0 auto; display: inline-block;">
-    <div id="ballistic-banner-slot">
-      </div>
-  </div>
-</div>
-
 
       <!-- RIGHT: Action panel -->
       <div class="action-panel fu fu1">
@@ -1258,23 +1134,6 @@ function renderDownload(data) {
 
         <div style="margin: 12px 0;"></div>
 
-        <!-- Native ad slot -->
-        <div class="card ad-native-card">
-          <div class="card-body">
-            <div class="ad-native-head">
-              <span style="font-size:12px;font-weight:700;color:var(--tx);">Recommended</span>
-              <span class="ad-label">Sponsored</span>
-            </div>
-            <div class="ad-slot ad-slot-native">
-              <div id="ballistic-native-slot">
-                
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin: 12px 0;"></div>
-
         <!-- FAQ -->
         <div id="faq" style="display:flex;flex-direction:column;gap:10px;">
           <h2 style="font-size:15px;font-weight:700;letter-spacing:-0.2px;padding-left:2px;">Frequently Asked Questions</h2>
@@ -1306,9 +1165,6 @@ function renderDownload(data) {
     </div><!-- /dl-layout -->
   </div>`
 
-  injectBallisticFrameAd('ballistic-banner-slot', BALLISTIC_BANNER_KEY, 320, 50)
-  injectBallisticNativeAd('ballistic-native-slot', BALLISTIC_NATIVE_KEY)
-  injectBallisticFrameAd('ballistic-static-rect-slot', BALLISTIC_RECT_KEY, 300, 250)
   if (consumeSmartlinkReturn()) startDownload(true)
   initReveal()
 }
@@ -1321,7 +1177,7 @@ function handleContinue() {
   setTimeout(() => { window.location.href = SMARTLINK_URL }, 250)
 }
 
-/* ── START DOWNLOAD ── */
+/* ── START DOWNLOAD (15 DETIK SYSTEM) ── */
 function startDownload(force = false) {
   if (!force && dlPhase !== 'idle') return
   if (force && dlPhase === 'progress') return
@@ -1411,14 +1267,12 @@ document.addEventListener('click', e => {
   const token = new URLSearchParams(location.search).get('d')
   if (!token) {
     renderLanding()
-    injectBallisticFrameAd('ballistic-static-rect-slot', BALLISTIC_RECT_KEY, 300, 250)
     initReveal()
     return
   }
   const data = decodeToken(token)
   if (!data || !data.title || !data.url) {
     renderLanding()
-    injectBallisticFrameAd('ballistic-static-rect-slot', BALLISTIC_RECT_KEY, 300, 250)
     initReveal()
     return
   }
