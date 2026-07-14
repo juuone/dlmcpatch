@@ -67,7 +67,7 @@
     --border2:  rgba(255,255,255,0.05);
 
     --tx:       #f5f5f7;
-    --tx2:      #98989d;
+    --tx2: #98989d;
     --tx3: 	#636366;
 
     --blue:     #2997ff;
@@ -354,6 +354,7 @@ img { display:block; }
 .spin { animation:spin .9s linear infinite; transform-origin:center; }
 
 /* ─── TOAST ──────────────────────────────────────────── */
+let _toastT = null
 #toast {
   position:fixed; top:62px; left:50%;
   transform:translateX(-50%); z-index:200; pointer-events:none;
@@ -516,11 +517,11 @@ footer {
   border-top:1px solid var(--border2); border-bottom:1px solid var(--border2);
   background:var(--surface2);
 }
-.app-stat {
+.app-stats .app-stat {
   padding:14px 8px; text-align:center;
   border-right:1px solid var(--border2);
 }
-.app-stat:last-child { border-right:none; }
+.app-stats .app-stat:last-child { border-right:none; }
 .app-stat-val {
   font-size:15px; font-weight:800; letter-spacing:-0.3px;
   font-family:var(--ffm); color:var(--tx);
@@ -886,7 +887,7 @@ function sizeWarn(raw) {
 
 /* ── ICON SVG ── */
 const ICONS = {
-  'info':           `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  'info': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
   'check-circle':   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
   'alert-triangle': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
   'alert-circle':   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
@@ -896,7 +897,6 @@ const ICONS = {
 }
 
 /* ── TOAST ── */
-let _toastT = null
 function toast(msg, type='blue') {
   const el = document.getElementById('toast')
   el.innerHTML = `<div class="toast-pill tp-${type} te">${ICONS[type==='green'?'check':'info']}${msg}</div>`
@@ -1132,11 +1132,10 @@ function renderDownload(data) {
           <div class="app-desc">${desc}</div>
         </div>
 
-        <!-- 🔴 NATIVE ADS SLOT (2 Grid) -->
+        <!-- 🔴 NATIVE ADS SLOT -->
         <div class="ad-wrapper ad-wrapper-native">
           <div class="ad-label">Sponsored Links</div>
-          <div style="width:100%;">
-            <` + `script async="async" data-cfasync="false" src="https://ballisticcomainvitation.com/4e831a89073f59a15f6f633d615edc58/invoke.js"></` + `script>
+          <div style="width:100%; min-height:150px;">
             <div id="container-4e831a89073f59a15f6f633d615edc58"></div>
           </div>
         </div>
@@ -1209,6 +1208,21 @@ function renderDownload(data) {
 
   if (consumeSmartlinkReturn()) startDownload(true)
   initReveal()
+
+  // ── Inject Adsterra Native Ads dynamically after innerHTML ──
+  try {
+    const adContainer = document.getElementById('container-4e831a89073f59a15f6f633d615edc58');
+    if (adContainer) {
+      const adScript = document.createElement('script');
+      adScript.type = 'text/javascript';
+      adScript.async = true;
+      adScript.setAttribute('data-cfasync', 'false');
+      adScript.src = 'https://ballisticcomainvitation.com/4e831a89073f59a15f6f633d615edc58/invoke.js';
+      adContainer.parentNode.insertBefore(adScript, adContainer);
+    }
+  } catch (e) {
+    console.error("Failed to load Adsterra Native Ads:", e);
+  }
 }
 
 function handleContinue() {
